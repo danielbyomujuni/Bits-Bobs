@@ -1,5 +1,8 @@
 ## `hash` Function
 
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+
 The `hash` function generates a hash value for a given string using a simple hashing algorithm. This algorithm is based on iterating through each character of the input string and updating a hash value.
 
 ### Code:

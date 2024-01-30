@@ -1,5 +1,8 @@
 ## `RNG` Class
 
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+
 The `RNG` class provides a simple implementation of a random number generator (RNG) using the Linear Congruential Generator (LCG) algorithm. This class allows for the generation of pseudo-random integers, floating-point numbers, and selection of random elements from an array.
 
 ### Code:
