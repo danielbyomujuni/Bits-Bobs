@@ -2,46 +2,6 @@
 
 ![C++](https://img.shields.io/badge/c++-%2300599C.svg?style=for-the-badge&logo=c%2B%2B&logoColor=white)
 
-The `BaseCommand.cpp` file contains the implementation of the `BaseCommand` class, providing a method for handling incorrect command usage.
-
-## Contents:
-
-```cpp
-//
-// Created by Daniel Byomujuni on 10/8/23.
-//
-
-#include "BaseCommand.h"
-#include <iostream>
-
-void BaseCommand::incorrectUsage(std::string usage) {
-    std::cout << "Usage: " << usage << std::endl;
-}
-```
-
-## Description:
-
-This file implements the `BaseCommand` class, which serves as a base class for handling command-related functionalities. It defines a method `incorrectUsage` that outputs a message indicating the correct usage of a command.
-
-## Methods:
-
-### `incorrectUsage(std::string usage)`
-
-Prints an error message indicating the correct usage of a command.
-
-#### Parameters:
-
-- `usage`: A string representing the correct usage of the command.
-
-#### Example:
-
-```cpp
-BaseCommand baseCommand;
-baseCommand.incorrectUsage("mangamanager --help");
-```
-
----
-
 # BaseCommand.h Documentation
 
 The `BaseCommand.h` file declares the `BaseCommand` class, providing a base structure for command implementations.
@@ -108,79 +68,6 @@ public:
         return 0;
     }
 };
-```
-
----
-
-# BaseCommandManager.cpp Documentation
-
-The `BaseCommandManager.cpp` file implements the `BaseCommandManager` class, responsible for managing commands and executing them.
-
-## Contents:
-
-```cpp
-//
-// Created by Daniel Byomujuni on 1/15/24.
-//
-
-#include "BaseCommandManager.h"
-
-void BaseCommandManager::addCommand(std::string alias, BaseCommand *cmd) {
-    this->commands.insert({alias, cmd});
-}
-
-int BaseCommandManager::runCommand(std::string cmd, std::vector<std::string> args) {
-    if (this->commands[cmd] == NULL) {
-        printf("mangamanager: unknown command: %s\n", cmd.c_str());
-        printf("Try 'mangamanager --help' for more information\n");
-        return -1;
-    }
-    return this->commands[cmd]->execute(args);
-}
-```
-
-## Description:
-
-This file implements the `BaseCommandManager` class, which manages commands and executes them based on user input.
-
-## Methods:
-
-### `addCommand(std::string alias, BaseCommand *cmd)`
-
-Adds a command to the manager with a specified alias.
-
-#### Parameters:
-
-- `alias`: A string representing the alias of the command.
-- `cmd`: A pointer to the `BaseCommand` object to be added.
-
-#### Example:
-
-```cpp
-BaseCommandManager commandManager;
-BaseCommand* customCommand = new CustomCommand();
-commandManager.addCommand("custom", customCommand);
-```
-
-### `runCommand(std::string cmd, std::vector<std::string> args)`
-
-Runs a command based on the provided alias and arguments.
-
-#### Parameters:
-
-- `cmd`: A string representing the alias of the command to be executed.
-- `args`: A vector of strings representing the command arguments.
-
-#### Returns:
-
-An integer indicating the result of the command execution.
-
-#### Example:
-
-```cpp
-BaseCommandManager commandManager;
-std::vector<std::string> commandArgs = {"arg1", "arg2"};
-int result = commandManager.runCommand("custom", commandArgs);
 ```
 
 ---
