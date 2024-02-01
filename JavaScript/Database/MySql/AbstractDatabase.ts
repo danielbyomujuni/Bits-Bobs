@@ -1,13 +1,9 @@
-import { Logger } from "../Logger";
 import mysql from "mysql2";
-import { env } from "$env/dynamic/private";
-import NoActiveTransactionException from "$lib/errors/NoActiveTransactionException";
-
 /**
  * The Root Database Class the Holds Methods
  * Used by every Child Class
  */
-export class AbstactDatabase {
+export default class AbstactDatabase {
   protected connection: any;
   protected promiseCon: any;
 
@@ -23,12 +19,12 @@ export class AbstactDatabase {
    * @param username "Application Username"
    * @param password "Application Password"
    */
-  protected constructor(username: string, password: string) {
+  protected constructor(database_address:string, username: string, password: string, database_name: string) {
     const conn = mysql.createPool({
-      host: env.PRIVATE_DATABASE_ADDRESS,
+      host: database_address,
       user: username,
       password: password,
-      database: env.PRIVATE_DATABASE_TABLE,
+      database: database_name,
       waitForConnections: true,
       connectionLimit: 10,
       maxIdle: 10,
@@ -51,11 +47,9 @@ export class AbstactDatabase {
       this.connection
         .execute(query)
         .then(([rows, fields]: any) => {
-          Logger.sql(query, true);
           resolve(rows);
         })
         .catch((err: any) => {
-          Logger.sql(query, false);
           reject(err);
         });
     });
@@ -83,7 +77,6 @@ export class AbstactDatabase {
    */
   public async startTransaction() {
     this.activeTransaction = true;
-    Logger.info(`Started Transaction On The Database`);
     try {
       await this.query(`START TRANSACTION;`);
     } catch (e: any) {
@@ -99,7 +92,6 @@ export class AbstactDatabase {
     try {
       this.isTransactionActive();
       await this.query(`COMMIT;`);
-      Logger.info(`Transaction Commited to The Database`);
       this.activeTransaction = false;
     } catch (e: any) {
       throw e;
@@ -114,7 +106,6 @@ export class AbstactDatabase {
     try {
       this.isTransactionActive();
       await this.query(`ROLLBACK;`);
-      Logger.info(`Transaction Rolled back`);
       this.activeTransaction = false;
     } catch (e: any) {
       throw e;
@@ -122,3 +113,8 @@ export class AbstactDatabase {
   }
 }
 
+export class NoActiveTransactionException extends Error {
+  constructor() {
+    super("No Transaction active");
+  }
+}

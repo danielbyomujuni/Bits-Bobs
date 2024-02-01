@@ -1,35 +1,50 @@
 # AbstractDatabase Class Documentation
-![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 
-The `AbstractDatabase` class serves as the root class for managing interactions with a PostgreSQL database. It provides essential methods for establishing connections, managing transactions, and executing SQL queries.
+The `AbstractDatabase` class is a foundational class for managing interactions with a database, providing methods to establish connections, manage transactions, and execute SQL queries.
 
-## Constructor
+## Class Signature:
 
-### `constructor(username: string, password: string)`
+```typescript
+export default class AbstractDatabase {
+  // ... Class implementation
+}
 
-Creates an instance of the `AbstractDatabase` class.
+export class NoActiveTransactionException extends Error {
+  constructor() {
+    super("No transaction active");
+  }
+}
+```
+
+## Constructor:
+
+### `constructor(databaseAddress: string, username: string, password: string, databaseName: string)`
+
+Creates an instance of the `AbstractDatabase` class and establishes a connection to the Given database.
 
 #### Parameters:
 
+- `databaseAddress`: IP/Domain of the MySQL database.
 - `username`: Application username for database access.
 - `password`: Application password for database access.
+- `databaseName`: Name of the MySQL database.
 
 #### Example:
 
 ```typescript
-const database = new AbstractDatabase("your_username", "your_password");
+const database = new AbstractDatabase("localhost", "your_username", "your_password", "your_database");
 ```
 
-## Public Methods
+## Public Methods:
 
-### `close(): Promise<void>`
+### `close(): void`
 
-Closes the database connection to prevent memory leaks.
+Closes the database connection to prevent a memory leak.
 
 #### Example:
 
 ```typescript
-await database.close();
+database.close();
 ```
 
 ### `startTransaction(): Promise<void>`
@@ -88,7 +103,7 @@ A promise that resolves with the result of the query.
 const result = await database.query("SELECT * FROM your_table;");
 ```
 
-## Protected Methods
+## Protected Methods:
 
 ### `isTransactionActive(): Promise<void>`
 
@@ -104,20 +119,30 @@ Verifies that there is an active transaction.
 await database.isTransactionActive();
 ```
 
-## Properties
+## Properties:
 
-### `connection: any`
+- `connection`: The MySQL connection pool used by the class.
 
-The PostgreSQL connection pool used by the class.
+## Usage:
 
-### `promiseCon: any`
+To use the `AbstractDatabase` class, create an instance by providing the required credentials. Then, you can utilize the provided methods to manage transactions and execute SQL queries against the connected database.
 
-A promise-based connection.
+## NoActiveTransactionException Class:
 
-### `activeTransaction: boolean`
+The `NoActiveTransactionException` class is an exception class that extends the standard `Error` class. It is thrown when attempting to commit or rollback a transaction without an active transaction.
 
-Indicates whether there is an active transaction.
+### Constructor:
 
-## Usage
+#### `constructor()`
 
-To use the `AbstractDatabase` class, create an instance by providing the required credentials. Then, you can utilize the provided methods to manage transactions and execute SQL queries against the connected PostgreSQL database.
+Creates an instance of the `NoActiveTransactionException` class with a default error message.
+
+#### Example:
+
+```typescript
+throw new NoActiveTransactionException();
+```
+
+---
+
+This documentation provides an overview of the purpose and functionality of the `AbstractDatabase` class, including the constructor, methods, and usage examples. The `NoActiveTransactionException` class is also introduced as an exception that can be thrown when necessary.

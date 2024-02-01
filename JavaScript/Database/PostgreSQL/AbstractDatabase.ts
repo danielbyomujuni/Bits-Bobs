@@ -1,7 +1,4 @@
-import Logger from "../Logger";
 import { Pool } from "pg";
-import { env } from "$env/dynamic/private";
-import NoActiveTransactionException from "$lib/errors/NoActiveTransactionException";
 
 /**
  * The Root Database Class the Holds Methods
@@ -25,10 +22,11 @@ export class AbstactDatabase {
    * @param username "Application Username"
    * @param password "Application Password"
    */
-  protected constructor(username: string, password: string) {
+  protected constructor(database_address:string, username: string, password: string, database_name: string) {
     this.connection = new Pool({
+      host: database_address,
       user: username,
-      database: env.PRIVATE_DATABASE_TABLE,
+      database: database_name,
       password: password,
     });
   }
@@ -46,7 +44,6 @@ export class AbstactDatabase {
    */
   public async startTransaction(): Promise<void> {
     this.activeTransaction = true;
-    Logger.info("Started Transaction On The Database");
     try {
       await this.query("BEGIN;");
     } catch (e: any) {
@@ -64,7 +61,6 @@ export class AbstactDatabase {
       //  return Promise.reject(new NoActiveTransactionException());
       // }
       await this.query("COMMIT;");
-      Logger.info("Transaction Commited to The Database");
       this.activeTransaction = false;
     } catch (e: any) {
       throw e;
@@ -81,7 +77,6 @@ export class AbstactDatabase {
         return await Promise.reject(new NoActiveTransactionException());
       }
       await this.query("ROLLBACK;");
-      Logger.info("Transaction Rolled back");
       this.activeTransaction = false;
     } catch (e: any) {
       throw e;
@@ -100,12 +95,9 @@ export class AbstactDatabase {
       try {
         const res = await client.query(query);
         // console.log(res.rows)
-
-        Logger.sql(query, true);
         client.release();
         resolve(res.rows);
       } catch (err: any) {
-        Logger.sql(query, false);
         client.release();
         reject(err);
       }
@@ -120,5 +112,11 @@ export class AbstactDatabase {
     if (!this.activeTransaction) {
       return await Promise.reject(new NoActiveTransactionException());
     }
+  }
+}
+
+export class NoActiveTransactionException extends Error {
+  constructor() {
+    super("No Transaction active");
   }
 }
