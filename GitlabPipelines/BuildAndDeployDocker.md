@@ -4,7 +4,7 @@
 ## Introduction
 This GitLab CI/CD pipeline automates the process of building a Docker container using a Dockerfile and deploying it to a server via SSH. The pipeline consists of two stages: `build` and `deploy`.
 
-##Pipeline file
+## Pipeline file
 
 ```yml
 stages:          # List of stages for jobs, and their order of execution
