@@ -4,6 +4,58 @@
 ## Introduction
 This GitLab CI/CD pipeline automates the process of building a Docker container using a Dockerfile and deploying it to a server via SSH. The pipeline consists of two stages: `build` and `deploy`.
 
+##Pipeline file
+
+```yml
+stages:          # List of stages for jobs, and their order of execution
+  - build
+  #- test
+  - deploy
+
+build-container:       # This job runs in the build stage, which runs first.
+  stage: build
+  only:
+    - main
+  image: 
+    name: gcr.io/kaniko-project/executor:v1.14.0-debug
+    entrypoint: [""]
+  tags:
+    - build-container
+  script:
+    - /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
+      --destination "${CI_REGISTRY_IMAGE}"
+
+
+deploy-container:
+  image: debian:latest
+  needs:
+    - build-container
+  stage: deploy
+  only:
+    - main
+  before_script:
+    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - echo $SSH_PRIVATE_KEY
+    - chmod 400 "$SSH_PRIVATE_KEY"
+    - ssh-add "$SSH_PRIVATE_KEY"
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+
+    #- apt -yq update
+    #- apt -yqq install ssh
+    #- install -m 600 -D /dev/null ~/.ssh/id_rsa
+    #- echo "kfx1v//BhZzIc6fcEQiJax9iLDqE12BLpf16TOekVbg" | base64 -d > ~/.ssh/id_rsa
+    #- ssh-keyscan -H 192.168.1.76 > ~/.ssh/known_hosts
+  script:
+    #- echo $SSH_PRIVATE_KEY
+    #- ssh -oStrictHostKeyChecking=no $SSH_USER@$SSH_HOST "echo hello world;"
+    ssh -oStrictHostKeyChecking=no $SSH_USER@$SSH_HOST "cd path/to/docker-compose.yml; sudo docker compose pull; sudo docker compose up -d; exit"
+```
+
+
 ## Pipeline Stages
 
 ### Build Stage
@@ -14,11 +66,6 @@ The `build` stage is responsible for building the Docker container using Kaniko.
 - **Conditions:** Runs only on the `main` branch.
 - **Image:** `gcr.io/kaniko-project/executor:v1.14.0-debug`
 - **Tags:** `build-container`
-- **Script:**
-  - Executes Kaniko with the necessary parameters to build the Docker container from the Dockerfile.
-  ```
-  /kaniko/executor --context "${CI_PROJECT_DIR}" --dockerfile "${CI_PROJECT_DIR}/Dockerfile" --destination "${CI_REGISTRY_IMAGE}"
-  ```
 
 ### Deploy Stage
 The `deploy` stage deploys the built Docker container to the server using SSH.
