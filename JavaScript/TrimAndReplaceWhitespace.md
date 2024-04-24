@@ -1,6 +1,9 @@
 
 ## Documentation: Removing and Replacing Whitespace in a String
 
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+
 The given code snippet is responsible for formatting a string by removing leading and trailing whitespace and replacing whitespace in the middle with a specified character, which in this case is an underscore ('_').
 
 ### Code Snippet:
