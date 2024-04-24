@@ -1,4 +1,3 @@
-```markdown
 # GitLab CI/CD Pipeline Documentation
 
 ## Introduction
@@ -79,11 +78,6 @@ The `deploy` stage deploys the built Docker container to the server using SSH.
   - Installs `openssh-client`.
   - Starts `ssh-agent` and adds the SSH private key.
   - Sets up SSH configuration.
-- **Script:**
-  - SSHs into the server and executes commands to pull the Docker image and start the container.
-  ```
-  ssh -oStrictHostKeyChecking=no $SSH_USER@$SSH_HOST "cd path/to/docker-compose.yml; sudo docker compose pull; sudo docker compose up -d; exit"
-  ```
 
 ## Docker Compose Configuration
 The provided Docker Compose file defines a service called `homepage` with configurations for the deployed container.
@@ -98,4 +92,3 @@ The provided Docker Compose file defines a service called `homepage` with config
 - Ensure that necessary environment variables such as `CI_PROJECT_DIR`, `CI_REGISTRY_IMAGE`, `SSH_PRIVATE_KEY`, `SSH_USER`, and `SSH_HOST` are properly configured in the GitLab CI/CD settings.
 - Modify the placeholders `<container_name>`, `<gitlab-registry_url>`, `<namespace>`, `<repo>`, `<external_port>`, and `<internal_port>` in the Docker Compose file according to your project requirements.
 - Adjust the SSH commands in the `deploy-container` job script to match your deployment setup.
-```
