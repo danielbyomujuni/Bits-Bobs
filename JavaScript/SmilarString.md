@@ -56,5 +56,3 @@ The similarity percentage between `string1` and `string2` will be calculated, an
 - Ensure that the function is properly imported and used within your JavaScript environment.
 - This function calculates similarity based on character positions, not considering semantic meaning or word order.
 - The returned similarity percentage ranges from 0.0 (no similarity) to 1.0 (identical strings).
-``` 
-```
