@@ -1,6 +1,6 @@
 # GitLab Pipeline Testing With Mongodb Documentation
 
-![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white
+![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
 
 ## Introduction
 This GitLab CI/CD pipeline snippet defines a testing stage (`testing`) for running application tests. It utilizes a specific Docker image and sets up a MongoDB service for testing purposes. Additionally, it configures environment variables required for MongoDB initialization.
