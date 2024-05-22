@@ -6,7 +6,7 @@ This GitLab CI/CD pipeline template is designed for building and testing Java pr
 ## Pipeline Configuration
 
 ### Default Configuration
-- **Image:** `java:8-jdk`
+- **Image:** `openjdk:21`
   - The Docker image used as the base environment for Java development.
 
 ### Stages
@@ -46,7 +46,7 @@ This GitLab CI/CD pipeline template is designed for building and testing Java pr
 To use this pipeline template, integrate it into your GitLab CI/CD configuration file (`gitlab-ci.yml`). Customize the stages, jobs, and scripts as necessary for your Java project.
 
 ```yaml
-image: java:8-jdk
+image: openjdk:21
 
 stages:
   - build
